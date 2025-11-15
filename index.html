@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Objetos Built-in de JavaScript</title>
+    <style>
+        /* === ESTILOS GLOBALES (DARK MODE POR DEFECTO) === */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #cccccc;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .slideshow-container { position: relative; width: 90%; max-width: 960px; }
+        
+        .slide {
+            display: none;
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            height: 540px; padding: 40px 60px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            flex-direction: column; justify-content: center; position: relative;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .fade { animation-name: fade; animation-duration: 0.5s; }
+        @keyframes fade { from {opacity: .4} to {opacity: 1} }
+
+        .prev, .next {
+            cursor: pointer; position: absolute; top: 50%; transform: translateY(-50%);
+            width: 50px; height: 50px; background-color: #333; color: #f1f1f1;
+            border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: flex; justify-content: center; align-items: center;
+            font-weight: bold; font-size: 24px; transition: all 0.3s ease;
+            user-select: none; z-index: 10;
+        }
+        .prev:hover, .next:hover { background-color: #555; }
+        .prev { left: -70px; }
+        .next { right: -70px; }
+
+        .slide h1 { font-size: 3.5em; text-align: center; border-bottom: 4px solid #3498db; padding-bottom: 20px; color: #3498db; }
+        .slide h2 { font-size: 2.8em; margin: 0 0 30px; text-align: center; color: #3498db; }
+        .single-content p { font-size: 1.3em; color: #cccccc; text-align: center; margin-bottom: 20px;}
+        pre { width: 90%; max-width: 700px; margin: 0 auto; background-color: #2b2b2b; color: #f1f1f1; padding: 15px; border-radius: 5px; font-size: 1.1em; white-space: pre-wrap; border: 1px solid #444; text-align: left; }
+        .footer { position: absolute; bottom: 20px; right: 40px; font-size: 1em; color: #888; }
+
+        .subtitle { color: #e0e0e0; font-size: 2em; font-weight: bold; margin: 0 0 30px; text-align: center; }
+        
+        /* === ESTILOS DEL SWITCH DE TEMA === */
+        .theme-switch-wrapper { position: fixed; top: 15px; right: 15px; z-index: 100; }
+        #theme-switch {
+            cursor: pointer; padding: 8px 12px; border-radius: 20px;
+            border: 1px solid #555; background-color: #333; color: #f1f1f1;
+            font-size: 0.9em; transition: all 0.3s ease;
+        }
+        #theme-switch:hover { background-color: #555; }
+
+        /* === ESTILOS DEL LIGHT MODE === */
+        body.light-mode { background-color: #f0f0f0; color: #333; }
+        body.light-mode .slide { background-color: #fff; border-color: #ccc; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        body.light-mode .slide h1 { color: #005A9C; border-color: #3498db; }
+        body.light-mode .slide h2 { color: #005A9C; }
+        body.light-mode .subtitle { color: #333; }
+        body.light-mode .single-content p { color: #444; }
+        body.light-mode pre { background-color: #e3e8e8; border-color: transparent; color: #1e1e1e; }
+        body.light-mode .prev, body.light-mode .next { background-color: #cccccc; color: #333; }
+        body.light-mode .prev:hover, body.light-mode .next:hover { background-color: #aaaaaa; }
+        body.light-mode #theme-switch { background-color: #fff; color: #333; border-color: #ccc; }
+        body.light-mode #theme-switch:hover { background-color: #eee; }
+
+        /* === MEDIA QUERIES === */
+        @media screen and (max-width: 768px) {
+            body { padding: 15px; }
+            .slideshow-container { width: 100%; padding-bottom: 75px; }
+            .slide { height: auto; min-height: 75vh; padding: 20px 25px; }
+            .prev, .next { top: auto; bottom: 15px; width: 45px; height: 45px; }
+            .prev { left: 50%; transform: translateX(-110%); }
+            .next { left: 50%; transform: translateX(10%); right: auto; }
+            .slide h1 { font-size: 2.2em; }
+            .slide h2 { font-size: 1.8em; }
+            .single-content p { font-size: 1.1em; }
+            pre { font-size: 0.9em; }
+            .footer { font-size: 0.8em; right: 25px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="theme-switch-wrapper">
+        <button id="theme-switch">Light Mode</button>
+    </div>
+
+    <div class="slideshow-container">
+        
+        <!-- =============================================================== -->
+        <!-- INICIO DEL CONTENIDO DE LAS DIAPOSITIVAS -->
+        <!-- =============================================================== -->
+
+        <div class="slide fade">
+            <h1>Objetos Built-in de JavaScript</h1>
+            <div class="subtitle">La "Caja de Herramientas" Estándar del Lenguaje</div>
+            <div class="footer">1 / 20</div>
+        </div>
+        
+        <div class="slide fade">
+            <h2>¿Qué son los Objetos Built-in?</h2>
+            <div class="single-content">
+                <p>Son objetos que JavaScript proporciona de forma nativa en su entorno de ejecución, ofreciendo funcionalidades esenciales sin necesidad de instalar librerías externas.</p>
+                <pre><code>// No necesitas importar nada para usar 'Math.random()'
+// o para crear una nueva fecha con 'new Date()'.
+// ¡Ya vienen incluidos!</code></pre>
+            </div>
+            <div class="footer">2 / 20</div>
+        </div>
+
+        <div class="slide fade">
+            <h2>String</h2>
+            <div class="single-content">
+                <p>Proporciona propiedades y métodos para trabajar con cadenas de texto. Cada string que creas tiene acceso a estas herramientas.</p>
+                <pre><code>let mensaje = "JavaScript es Genial";
+
+// Propiedad para obtener la longitud
+console.log(mensaje.length); // 18
+
+// Métodos para cambiar mayúsculas/minúsculas
+console.log(mensaje.toUpperCase()); // "JAVASCRIPT ES GENIAL"
+console.log(mensaje.toLowerCase()); // "javascript es genial"</code></pre>
+            </div>
+            <div class="footer">3 / 20</div>
+        </div>
+
+        <div class="slide fade">
+            <h2>Métodos Útiles de String</h2>
+            <div class="single-content">
+                <p>Permiten buscar, extraer y reemplazar partes de un texto.</p>
+                <pre><code>let frase = "Hola Mundo, bienvenido al Mundo JS";
+
+// Encontrar la posición de una subcadena
+frase.indexOf('Mundo'); // 5
+
+// Extraer una parte del string
+frase.slice(5, 10); // "Mundo"
+
+// Reemplazar texto
+frase.replace('Mundo', 'Universo'); // "Hola Universo, bienvenido al Mundo JS"</code></pre>
+            </div>
+            <div class="footer">4 / 20</div>
+        </div>
+
+        <div class="slide fade">
+            <h2>Number</h2>
+            <div class="single-content">
+                <p>Ofrece métodos para formatear y analizar números.</p>
+                <pre><code>let precio = 49.9567;
+
+// Formatear a un número de decimales fijos
+precio.toFixed(2); // "49.96" (devuelve un string)
+
+// Convertir un string a un número entero
+Number.parseInt("101.5 manzanas"); // 101
+
+// Comprobar si un valor NO es un número
+Number.isNaN('hola'); // true</code></pre>
+            </div>
+            <div class="footer">5 / 20</div>
+        </div>
+
+        <div class="slide fade">
+            <h2>Boolean y Function</h2>
+            <div class="single-content">
+                <p>Son los constructores para los primitivos `boolean` y las `function`. Aunque se usan menos directamente, son fundamentales para el lenguaje.</p>
+                <pre><code>let esVerdadero = true;
+// esVerdadero.toString() -> "true"
+
+function saludar() {}
+// saludar.name -> "saludar"
+// saludar.length -> 0 (número de argumentos esperados)</code></pre>
+            </div>
+            <div class="footer">6 / 20</div>
+        </div>
+
+        <div class="slide fade">
+            <h2>Math (Objeto Estático)</h2>
+            <div class="single-content">
+                <p>Es un objeto singular (no se instancia con `new`) que agrupa constantes y funciones matemáticas.</p>
+                <pre><code>// Constantes matemáticas
+console.log(Math.PI); // 3.141592653589793
+console.log(Math.E);  // 2.718281828459045
+
+// Generar un número aleatorio entre 0 y 1
+console.log(Math.random());</code></pre>
+            </div>
+            <div class="footer">7 / 20</div>
+        </div>
+
+        <div class="slide fade">
+            <h2>Math: Redondeo</h2>
+            <div class="single-content">
+                <p>Funciones para redondear números de diferentes maneras.</p>
+                <pre><code>let numero = 9.5;
+
+Math.floor(numero); // 9 (redondea hacia abajo)
+Math.ceil(numero);  // 10 (redondea hacia arriba)
+Math.round(numero); // 10 (redondeo estándar al más cercano)</code></pre>
+            </div>
+            <div class="footer">8 / 20</div>
+        </div>
+
+        <div class="slide fade">
+            <h2>Math: Potencias y Raíces</h2>
+            <div class="single-content">
+                <p>Cálculos comunes como potencias, raíces, máximos y mínimos.</p>
+                <pre><code>// Potencia (2 elevado a la 8)
+Math.pow(2, 8); // 256
+
+// Raíz cuadrada
+Math.sqrt(81); // 9
+
+// Encontrar el valor máximo o mínimo
+Math.max(10, 5, 100, 2);  // 100
+Math.min(10, 5, 100, 2);  // 2</code></pre>
+            </div>
+            <div class="footer">9 / 20</div>
+        </div>
+
+        <div class="slide fade">
+            <h2>Date: Creación de Fechas</h2>
+            <div class="single-content">
+                <p>El objeto `Date` se usa para trabajar con fechas y horas. Se debe instanciar con la palabra clave `new`.</p>
+                <pre><code>// Fecha y hora actual
+const ahora = new Date();
+console.log(ahora);
+
+// Una fecha específica (Año, Mes-1, Día)
+const navidad = new Date(2025, 11, 25);
+console.log(navidad);</code></pre>
+            </div>
+            <div class="footer">10 / 20</div>
+        </div>
+
+        <div class="slide fade">
+            <h2>Date: Obtener Componentes</h2>
+            <div class="single-content">
+                <p>Una vez creado un objeto `Date`, podemos extraer sus partes individuales.</p>
+                <pre><code>const hoy = new Date();
+
+hoy.getFullYear(); // Devuelve el año (ej: 2025)
+hoy.getMonth();    // Devuelve el mes (0-11, Enero es 0)
+hoy.getDate();     // Devuelve el día del mes (1-31)
+hoy.getHours();    // Devuelve la hora (0-23)
+hoy.getDay();      // Devuelve el día de la semana (0-6, Domingo es 0)</code></pre>
+            </div>
+            <div class="footer">11 / 20</div>
+        </div>
+
+        <div class="slide fade">
+            <h2>Date: Formateo</h2>
+            <div class="single-content">
+                <p>Existen varios métodos para convertir una fecha en un string legible para humanos.</p>
+                <pre><code>const evento = new Date();
+
+// Formato de fecha estándar
+evento.toDateString(); // "Fri Nov 14 2025"
+
+// Formato de hora local
+evento.toLocaleTimeString(); // "11:54:00 PM"
+
+// Formato estándar ISO 8601 (muy usado en APIs)
+evento.toISOString(); // "2025-11-15T05:54:00.000Z"</code></pre>
+            </div>
+            <div class="footer">12 / 20</div>
+        </div>
+        
+        <div class="slide fade">
+            <h2>Array: Métodos básicos</h2>
+            <div class="single-content">
+                <p>Probablemente el objeto más usado. Ofrece una enorme cantidad de métodos para manipular listas de datos.</p>
+                <pre><code>let frutas = ["Manzana", "Banana"];
+
+// Añadir al final
+frutas.push("Naranja"); // ["Manzana", "Banana", "Naranja"]
+
+// Eliminar el último
+frutas.pop(); // ["Manzana", "Banana"]
+
+// Unir elementos en un string
+frutas.join(", "); // "Manzana, Banana"</code></pre>
+            </div>
+            <div class="footer">13 / 20</div>
+        </div>
+
+        <div class="slide fade">
+            <h2>Array: Métodos Iterativos</h2>
+            <div class="single-content">
+                <p>Métodos modernos y muy potentes que reciben una función como argumento para procesar los elementos del array.</p>
+                <pre><code>let numeros = [1, 2, 3, 4, 5];
+
+// .map(): Crea un nuevo array con los resultados
+const dobles = numeros.map(n => n * 2); // [2, 4, 6, 8, 10]
+
+// .filter(): Crea un nuevo array con elementos que cumplen una condición
+const pares = numeros.filter(n => n % 2 === 0); // [2, 4]</code></pre>
+            </div>
+            <div class="footer">14 / 20</div>
+        </div>
+        
+        <div class="slide fade">
+            <h2>Object</h2>
+            <div class="single-content">
+                <p>El ancestro de casi todos los objetos en JS. Proporciona métodos estáticos para trabajar con las claves y valores de cualquier objeto.</p>
+                <pre><code>const coche = { marca: 'Tesla', modelo: 'Model S' };
+
+// Obtener un array con las claves
+Object.keys(coche);   // ["marca", "modelo"]
+
+// Obtener un array con los valores
+Object.values(coche); // ["Tesla", "Model S"]
+
+// Obtener un array de arrays [clave, valor]
+Object.entries(coche); // [["marca", "Tesla"], ["modelo", "Model S"]]</code></pre>
+            </div>
+            <div class="footer">15 / 20</div>
+        </div>
+        
+        <div class="slide fade">
+            <h2>Error</h2>
+            <div class="single-content">
+                <p>Es el objeto base para los errores. Se utiliza junto con las sentencias `throw` y `try...catch` para manejar excepciones en el código.</p>
+                <pre><code>try {
+  // Código que podría fallar...
+  throw new Error("Algo salió muy mal");
+} catch (error) {
+  // Capturamos el objeto Error
+  console.error(error.message); // "Algo salió muy mal"
+}</code></pre>
+            </div>
+            <div class="footer">16 / 20</div>
+        </div>
+        
+        <div class="slide fade">
+            <h2>JSON (Objeto Estático)</h2>
+            <div class="single-content">
+                <p>Proporciona métodos para convertir objetos de JavaScript a formato de texto JSON (JavaScript Object Notation) y viceversa.</p>
+                <pre><code>const datos = { id: 42, user: "admin", active: true };
+
+// Convertir un objeto a un string JSON
+const jsonString = JSON.stringify(datos);
+// '{"id":42,"user":"admin","active":true}'</code></pre>
+            </div>
+            <div class="footer">17 / 20</div>
+        </div>
+        
+        <div class="slide fade">
+            <h2>JSON.parse()</h2>
+            <div class="single-content">
+                <p>Es la operación inversa: convierte una cadena de texto con formato JSON en un objeto de JavaScript con el que podemos trabajar.</p>
+                <pre><code>const jsonString = '{"id":101,"producto":"Laptop"}';
+
+// Convertir un string JSON a un objeto
+const productoObj = JSON.parse(jsonString);
+
+console.log(productoObj.producto); // "Laptop"</code></pre>
+            </div>
+            <div class="footer">18 / 20</div>
+        </div>
+
+        <div class="slide fade">
+            <h2>Otros Objetos Notables</h2>
+            <div class="single-content">
+                <p>El ecosistema de JavaScript es muy rico. ¡Hay mucho más por explorar!</p>
+                <pre><code>// RegExp: Para crear Expresiones Regulares.
+const regex = /^\d+$/;
+
+// Map: Colecciones clave-valor más avanzadas.
+const miMapa = new Map();
+
+// Set: Colecciones de valores únicos.
+const miSet = new Set([1, 1, 2, 3]); // {1, 2, 3}
+
+// Promise: Para manejar operaciones asíncronas.</code></pre>
+            </div>
+            <div class="footer">19 / 20</div>
+        </div>
+        
+        <div class="slide fade">
+            <h2>Conclusión</h2>
+            <div class="single-content">
+                <p>Dominar los objetos `built-in` es fundamental para escribir código JavaScript eficaz y profesional. Son la base sobre la que se construyen aplicaciones complejas.</p>
+                <pre><code>// ¡Sigue practicando y explorando
+// la documentación para descubrir
+// todo su potencial!</code></pre>
+            </div>
+            <div class="footer">20 / 20</div>
+        </div>
+
+        <!-- =============================================================== -->
+        <!-- FIN DEL CONTENIDO DE LAS DIAPOSITIVAS -->
+        <!-- =============================================================== -->
+
+        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+    </div>
+
+    <!-- Lógica de JavaScript -->
+    <script>
+        // --- Lógica de la presentación ---
+        let slideIndex = 1;
+        showSlides(slideIndex);
+
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+        }
+
+        function showSlides(n) {
+            let i;
+            let slides = document.getElementsByClassName("slide");
+            if (n > slides.length) { slideIndex = 1 } 
+            if (n < 1) { slideIndex = slides.length }
+            
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            
+            slides[slideIndex - 1].style.display = "flex";
+        }
+
+        // --- Lógica del cambio de tema (Light/Dark Mode) ---
+        const themeSwitch = document.getElementById('theme-switch');
+        const body = document.body;
+
+        function applyTheme(theme) {
+            if (theme === 'light') {
+                body.classList.add('light-mode');
+                themeSwitch.textContent = 'Dark Mode';
+            } else {
+                body.classList.remove('light-mode');
+                themeSwitch.textContent = 'Light Mode';
+            }
+        }
+
+        themeSwitch.addEventListener('click', () => {
+            let currentTheme = body.classList.contains('light-mode') ? 'light' : 'dark';
+            let newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            applyTheme(newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'dark'; // Dark mode por defecto
+            applyTheme(savedTheme);
+        });
+
+        // --- Lógica para navegar con flechas del teclado ---
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowLeft') {
+                plusSlides(-1);
+            } else if (event.key === 'ArrowRight') {
+                plusSlides(1);
+            }
+        });
+    </script>
+
+</body>
+</html>
